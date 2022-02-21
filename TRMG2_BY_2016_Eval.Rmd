@@ -646,6 +646,8 @@ temp
 
 # Transit
 
+Please excuse the lower case, it helps join the observed to the V6 outputs. 
+
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -656,6 +658,8 @@ observed <-read_tcad("c:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs
   rename(OPERATOR = COMPANY,
          Observed = RIDERSHIP) %>%
   add_row(OPERATOR = 'OPT',Observed= 0)
+
+observed$OPERATOR <- tolower(observed$OPERATOR)
 
 
 
@@ -676,6 +680,9 @@ pk_data <- read_tcad("c:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs
 
 total_transit <- merge(op_data, pk_data) %>%
   mutate(Total_Trips = Total_OP + Total_PK) 
+
+
+total_transit$OPERATOR <- tolower(total_transit$OPERATOR)
 
 total <- merge(total_transit, observed) %>%
   adorn_totals('row')%>%

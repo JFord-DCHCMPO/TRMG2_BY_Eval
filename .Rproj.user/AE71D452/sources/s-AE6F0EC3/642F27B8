@@ -1,0 +1,32 @@
+{
+    "id": "642F27B8",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1645483724546.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "expression": "total_transit",
+        "caption": "total_transit",
+        "totalObservations": "8",
+        "displayedObservations": "8",
+        "variables": "4",
+        "cacheKey": "83D04BEE",
+        "object": "total_transit",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=total_transit&cache_key=83D04BEE&max_cols=50",
+        "preview": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 21673925399543853,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1645483724546,
+    "read_only": false,
+    "read_only_alternatives": []
+}

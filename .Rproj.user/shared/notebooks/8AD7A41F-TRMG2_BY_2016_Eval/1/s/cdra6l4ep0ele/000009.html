@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<script src="lib/jquery-3.5.1/jquery-3.5.1.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/kePrint-0.0.1/kePrint.js"></script>
+<link href="lib/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+</head>
+<body>
+<table class=" lightable-classic" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>TRMv6.2 Total Transit Ridership by TOD</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> OPERATOR </th>
+   <th style="text-align:right;"> Total_OP </th>
+   <th style="text-align:right;"> Total_PK </th>
+   <th style="text-align:right;"> Total_Trips </th>
+   <th style="text-align:right;"> Observed </th>
+   <th style="text-align:right;"> PctDev </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> cat </td>
+   <td style="text-align:right;"> 9899.0531 </td>
+   <td style="text-align:right;"> 13954.4857 </td>
+   <td style="text-align:right;"> 23853.5388 </td>
+   <td style="text-align:right;"> 24114 </td>
+   <td style="text-align:right;"> -0.0108012 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> cht </td>
+   <td style="text-align:right;"> 13394.6948 </td>
+   <td style="text-align:right;"> 16401.7934 </td>
+   <td style="text-align:right;"> 29796.4883 </td>
+   <td style="text-align:right;"> 26356 </td>
+   <td style="text-align:right;"> 0.1305391 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ctran </td>
+   <td style="text-align:right;"> 1189.5224 </td>
+   <td style="text-align:right;"> 1407.4559 </td>
+   <td style="text-align:right;"> 2596.9783 </td>
+   <td style="text-align:right;"> 1001 </td>
+   <td style="text-align:right;"> 1.5943839 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> data </td>
+   <td style="text-align:right;"> 11359.4352 </td>
+   <td style="text-align:right;"> 11927.1762 </td>
+   <td style="text-align:right;"> 23286.6113 </td>
+   <td style="text-align:right;"> 21472 </td>
+   <td style="text-align:right;"> 0.0845106 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> duke </td>
+   <td style="text-align:right;"> 3715.8149 </td>
+   <td style="text-align:right;"> 4301.9723 </td>
+   <td style="text-align:right;"> 8017.7872 </td>
+   <td style="text-align:right;"> 14321 </td>
+   <td style="text-align:right;"> -0.4401378 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ncsu </td>
+   <td style="text-align:right;"> 7252.3925 </td>
+   <td style="text-align:right;"> 4621.1928 </td>
+   <td style="text-align:right;"> 11873.5852 </td>
+   <td style="text-align:right;"> 16530 </td>
+   <td style="text-align:right;"> -0.2816948 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> opt </td>
+   <td style="text-align:right;"> 325.1405 </td>
+   <td style="text-align:right;"> 251.0703 </td>
+   <td style="text-align:right;"> 576.2108 </td>
+   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:right;"> Inf </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> tta </td>
+   <td style="text-align:right;"> 2793.9636 </td>
+   <td style="text-align:right;"> 14240.5786 </td>
+   <td style="text-align:right;"> 17034.5422 </td>
+   <td style="text-align:right;"> 8997 </td>
+   <td style="text-align:right;"> 0.8933580 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Total </td>
+   <td style="text-align:right;"> 49930.0170 </td>
+   <td style="text-align:right;"> 67105.7252 </td>
+   <td style="text-align:right;"> 117035.7421 </td>
+   <td style="text-align:right;"> 112791 </td>
+   <td style="text-align:right;"> 0.0376337 </td>
+  </tr>
+</tbody>
+</table> <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"]]}})</script><script async src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
