@@ -10,15 +10,17 @@
     "source_on_save": false,
     "relative_order": 2,
     "properties": {
-        "cursorPosition": "28,107",
-        "scrollLine": "0"
+        "cursorPosition": "392,0",
+        "scrollLine": "387",
+        "docOutlineVisible": "1",
+        "last_setup_crc32": "AE6F0EC34cd80ebe"
     },
     "folds": "",
-    "lastKnownWriteTime": 1645477592,
+    "lastKnownWriteTime": 1645479131,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1645477592,
+    "last_content_update": 1645479131193,
     "read_only": false,
     "read_only_alternatives": []
 }

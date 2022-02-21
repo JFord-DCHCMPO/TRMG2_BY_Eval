@@ -35,12 +35,12 @@ g2$County <- tolower(g2$County)
 
 
 v <- read_tcad("C:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016 - Copy/Input/Highway/Highway_Line.bin") 
+v[is.na(v)]<-0
 
-##Add VMT field
 v['TotVMT'] = v['ABAMVMT']+v['ABMDVMT']+v['ABNTVMT']+v['ABPMVMT']+v['BAAMVMT']+v['BAMDVMT']+v['BANTVMT']+v['BAPMVMT']
 ##get rid of NA values, set to zero:
 
-v[is.na(v)]<-0
+
 
 v$COUNTY <- tolower(v$COUNTY)
 
