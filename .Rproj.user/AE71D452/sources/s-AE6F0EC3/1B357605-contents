@@ -37,9 +37,7 @@ g2$County <- tolower(g2$County)
 v <- read_tcad("C:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016 - Copy/Input/Highway/Highway_Line.bin") 
 
 ##Add VMT field
-v$ToT_VMT <- (v$ABAMVMT+ v$ABMDVMT+ v$ABNTVMT+ v$ABPMVMT+v$BAAMVMT+v$BAMDVMT+ v$BANTVMT+ v$BAPMVMT)
-
-
+v['TotVMT'] = v['ABAMVMT']+v['ABMDVMT']+v['ABNTVMT']+v['ABPMVMT']+v['BAAMVMT']+v['BAMDVMT']+v['BANTVMT']+v['BAPMVMT']
 ##get rid of NA values, set to zero:
 
 v[is.na(v)]<-0
@@ -131,6 +129,8 @@ ggplotly(p)
 
 
 ## County
+
+Note totals may not equal from MPO to County due to links missing either MPO or County label in TRMG2 or TRMv6.2 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -266,6 +266,7 @@ temp2 %>%
 
 ## Cutline/Screenlines
 
+Added one cutline (Downtown Durham Loop) and two screenlines (I-85 and I-40) for further evaluation of the TRMG2 assignment. 
 
 TRMG2 Screenlines:
 
@@ -400,7 +401,7 @@ library(kableExtra)
 
 
 
-temp <- add_counts %>%
+temp <- v %>%
  # filter(Daily_Counts > 0) %>%
   mutate(MPO_Tag = case_when(
     is.na(MPO) ~ 'None',
@@ -411,7 +412,7 @@ temp <- add_counts %>%
   group_by(MPO_Tag) %>%
  # filter(Daily_Counts > 0) %>%
    summarise(
-    Total_VMT = sum(ToT_VMT, na.rm=T)) %>%
+    Total_VMT = sum(TotVMT, na.rm=T)) %>%
   adorn_totals('row')
 
 temp %>%
@@ -471,13 +472,13 @@ ggplotly(p)
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
-temp <- add_counts %>% 
+temp <- v %>% 
   group_by(COUNTY) %>%
   filter(COUNTY != "external") %>%
  # filter(Daily_Counts > 0) %>%
   filter(COUNTY != "") %>% ##filters empty space for tagged links with no counties 
   summarise(
-    Total_VMT = sum(ToT_VMT, na.rm=T)) %>%
+    Total_VMT = sum(TotVMT, na.rm=T)) %>%
   add_row(COUNTY = 'alamance', Total_VMT = 0) %>%
   arrange(COUNTY) %>%
   adorn_totals('row') 
@@ -540,7 +541,7 @@ ggplotly(p)
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
-temp <- add_counts %>% 
+temp <- v %>% 
   mutate(FCGROUP_Tag = case_when(
     FCGROUP == 1 ~ "Freeway",
     FCGROUP == 2 ~ "Major Arterial",
@@ -548,12 +549,10 @@ temp <- add_counts %>%
     FCGROUP == 4 ~ "Collector",
     FCGROUP == 5 ~ "Local",
   )) %>%
-  filter(!is.na(FCGROUP_Tag)) %>%
+  filter(FCGROUP_Tag!=999) %>%
   group_by(FCGROUP_Tag) %>%
-  filter(Daily_Counts > 0) %>%
- # filter(COUNTY != "") %>% ##filters empty space for tagged links with no counties 
   summarise(
-    Total_VMT = sum(ToT_VMT, na.rm=T)) %>%
+    Total_VMT = sum(TotVMT, na.rm=T)) %>%
   arrange(Total_VMT) %>%
   adorn_totals('row') 
 
@@ -565,7 +564,6 @@ temp %>%
 
 temp2 <- g2 %>%
   group_by(HCMType) %>%
-  filter(DailyCount > 0) %>%
   filter(HCMType != "CC") %>% ##filters empty space for tagged links with no counties 
   summarise(
     Total_VMT = sum(Total_VMT_Daily, na.rm=T)) %>%
@@ -654,6 +652,13 @@ temp
 
 line_names <- c("TTA", "CAT", "CHT", 'DATA', 'NCSU', 'Duke', 'OPT', 'CTRAN')
 
+observed <-read_tcad("c:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016 - Copy/EvalModule/Transit_Ridership_Observed_2016.bin") %>%
+  rename(OPERATOR = COMPANY,
+         Observed = RIDERSHIP) %>%
+  add_row(OPERATOR = 'OPT',Observed= 0)
+
+
+
 op_data <- read_tcad("c:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016 - Copy/Output/OPT.bin") %>%
   mutate(OPERATOR = line_names) %>%
   group_by(OPERATOR) %>%
@@ -670,11 +675,14 @@ pk_data <- read_tcad("c:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs
 
 
 total_transit <- merge(op_data, pk_data) %>%
-  mutate(Total = Total_OP + Total_PK)
+  mutate(Total_Trips = Total_OP + Total_PK) 
+
+total <- merge(total_transit, observed) %>%
+  adorn_totals('row')%>%
+  mutate(PctDev = (Total_Trips - Observed)/Observed)
 
 
-
-total_transit %>%
+total %>%
   kbl(caption = "TRMv6.2 Total Transit Ridership by TOD") %>%
   kable_classic(full_width = F, html_font = "Cambria")
 
@@ -688,6 +696,8 @@ total_transit %>%
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ##Load TRMG2 Transit
+
+
 
 g2_transit <- read.csv('C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/output/_summaries/transit/boardings_and_alightings_by_period.csv') %>%
   group_by(Agency) %>%
