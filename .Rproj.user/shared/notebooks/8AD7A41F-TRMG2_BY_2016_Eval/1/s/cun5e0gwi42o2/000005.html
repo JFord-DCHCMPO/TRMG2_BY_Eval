@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<script src="lib/jquery-3.5.1/jquery-3.5.1.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lib/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lib/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="lib/kePrint-0.0.1/kePrint.js"></script>
+<link href="lib/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+</head>
+<body>
+<table class=" lightable-classic" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>TRMG2 Total Volume by County</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> County </th>
+   <th style="text-align:right;"> Total_Volume </th>
+   <th style="text-align:right;"> Total_Counts </th>
+   <th style="text-align:right;"> Count </th>
+   <th style="text-align:right;"> PctDiff </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> alamance </td>
+   <td style="text-align:right;"> 875218.15 </td>
+   <td style="text-align:right;"> 918000 </td>
+   <td style="text-align:right;"> 61 </td>
+   <td style="text-align:right;"> -0.0488814 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> chatham </td>
+   <td style="text-align:right;"> 912262.99 </td>
+   <td style="text-align:right;"> 830880 </td>
+   <td style="text-align:right;"> 145 </td>
+   <td style="text-align:right;"> 0.0892100 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> durham </td>
+   <td style="text-align:right;"> 12969703.99 </td>
+   <td style="text-align:right;"> 12761537 </td>
+   <td style="text-align:right;"> 828 </td>
+   <td style="text-align:right;"> 0.0160503 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> franklin </td>
+   <td style="text-align:right;"> 1020690.38 </td>
+   <td style="text-align:right;"> 1052190 </td>
+   <td style="text-align:right;"> 221 </td>
+   <td style="text-align:right;"> -0.0308611 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> granville </td>
+   <td style="text-align:right;"> 628106.70 </td>
+   <td style="text-align:right;"> 702670 </td>
+   <td style="text-align:right;"> 134 </td>
+   <td style="text-align:right;"> -0.1187112 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> harnett </td>
+   <td style="text-align:right;"> 652223.98 </td>
+   <td style="text-align:right;"> 585480 </td>
+   <td style="text-align:right;"> 140 </td>
+   <td style="text-align:right;"> 0.1023329 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> johnston </td>
+   <td style="text-align:right;"> 3436414.09 </td>
+   <td style="text-align:right;"> 3686610 </td>
+   <td style="text-align:right;"> 505 </td>
+   <td style="text-align:right;"> -0.0728073 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> nash </td>
+   <td style="text-align:right;"> 66200.31 </td>
+   <td style="text-align:right;"> 58670 </td>
+   <td style="text-align:right;"> 30 </td>
+   <td style="text-align:right;"> 0.1137504 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> orange </td>
+   <td style="text-align:right;"> 3925944.75 </td>
+   <td style="text-align:right;"> 3705250 </td>
+   <td style="text-align:right;"> 447 </td>
+   <td style="text-align:right;"> 0.0562144 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> person </td>
+   <td style="text-align:right;"> 527404.48 </td>
+   <td style="text-align:right;"> 825020 </td>
+   <td style="text-align:right;"> 191 </td>
+   <td style="text-align:right;"> -0.5643022 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> wake </td>
+   <td style="text-align:right;"> 31020631.33 </td>
+   <td style="text-align:right;"> 30336900 </td>
+   <td style="text-align:right;"> 1846 </td>
+   <td style="text-align:right;"> 0.0220412 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Total </td>
+   <td style="text-align:right;"> 56034801.14 </td>
+   <td style="text-align:right;"> 55463207 </td>
+   <td style="text-align:right;"> 4548 </td>
+   <td style="text-align:right;"> 0.0102007 </td>
+  </tr>
+</tbody>
+</table> <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"]]}})</script><script async src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
