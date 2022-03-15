@@ -1,0 +1,4 @@
+"0",""
+"0","g2_nm_cluster%>%"
+"0","  kbl(caption = ""Removed ATT Total Nonmotorized Trips by Cluster"") %>%"
+"0","  kable_classic(full_width = F, html_font = ""Cambria"")"

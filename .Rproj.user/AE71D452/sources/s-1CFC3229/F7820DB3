@@ -1,0 +1,32 @@
+{
+    "id": "F7820DB3",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1647357239245.0,
+    "source_on_save": false,
+    "relative_order": 8,
+    "properties": {
+        "expression": "add_tags",
+        "caption": "add_tags",
+        "totalObservations": "3021",
+        "displayedObservations": "3021",
+        "variables": "4",
+        "cacheKey": "805221EB",
+        "object": "add_tags",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=add_tags&cache_key=805221EB&max_cols=50",
+        "preview": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 13792669003677797,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1647357239245,
+    "read_only": false,
+    "read_only_alternatives": []
+}
