@@ -5,20 +5,11 @@ date: "2/14/2022"
 output: html_document
 ---
 
-This document analyzes the initial base year (2016) model output for the TRMG2 against the TRMv6.2. Note: The TRMG2 2016 base year will be updated to the 2020 upon final delivery, however the interim delivery of the 2016 network is useful to analyze the TRMG2 assignment in comparison to the TRMv6.2. Note, as the TRMG2 model includes the expansion into Alamance and Johnston Counties, county level totals may deviate from totals in TRMv6.2. 
+Three Scenarios
 
-Overall, takeaways include: 
-
-* Assignment on MPO and County levels are much closer to count totals, an improvement on TRMv6.2
-* Even with introduction of Alamance and Johnston county expansions, traffic assignment better matched TRMv6.2
-* Transit assignment was particularly improved, especially for GoTriangle, NCSU and Duke routes
-* Two screenlines and one cutline representing I-85, I-40 and the Downtown Durham Loop were manually added into the network to evaluate performance; each were within the targer range. 
-* VMT is 5% higher in TRMG2, mainly originating from Wake County, which may cause concern
-
-
-
-
-
+1. 2016 BY
+2. NM_Test 
+3. Transit_Test
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
@@ -44,7 +35,7 @@ g2 <- g2 %>%
 g2$County <- tolower(g2$County)
 
 
-v <- read_tcad("C:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016 - Copy/Input/Highway/Highway_Line.bin") 
+v <- read_tcad("K:/Planning/Modeling/Jake's files/Original TRMv6.2_2016 - Copy/Input/Highway/Highway_Line.bin") 
 v[is.na(v)]<-0
 
 v['TotVMT'] = v['ABAMVMT']+v['ABMDVMT']+v['ABNTVMT']+v['ABPMVMT']+v['BAAMVMT']+v['BAMDVMT']+v['BANTVMT']+v['BAPMVMT']
@@ -65,6 +56,38 @@ add_counts <- left_join(v, v_counts)
 
 
 ```
+
+
+
+```{r}
+g2 <-  read_tcad("C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/output/networks/scenario_links.bin") %>%
+  select(ID, HCMType, DailyCount, AB_Flow_Daily, BA_Flow_Daily, Total_Flow_Daily,)
+
+
+list = c(50041,
+50095,
+162682,
+12050,
+126327,
+22067,
+53436,
+126579,
+127578,
+8568,
+4330,
+126856,
+47687,
+101231,
+7237)
+
+library(sf)
+links <- g2 %>%
+  #st_drop_geometry() %>%
+  filter(ID %in% list)
+
+
+```
+
 
 # Volume - Total Daily Flow
 
