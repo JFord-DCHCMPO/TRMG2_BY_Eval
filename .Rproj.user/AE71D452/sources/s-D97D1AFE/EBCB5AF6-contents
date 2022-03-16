@@ -768,7 +768,10 @@ g2_transit_highway$County <- tolower(g2_transit_highway$County)
 
 The nonmotorized test removed the entire American Tobacco Trail from the network. Inputs from the 2016 base year were kept exactly the same.  Total TAZ level nonmotorized trips are compared to the base year with American Tobacco Trail included to this test scenario below. Outputs analyzed include nonmotorized trips and VMT to determine TRMG2 sensitivity to scenario testing. 
 
+Takeaways/Questions: 
 
+* After removing the American Tobacco Trail, NM trips increased overall albeit very slightly. This may seem counterintuitive after removing the largest NM pathway in the model region. 
+* Removal of ATT should impact the walkability and/or approach density used in accessibility calculation 
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -854,20 +857,19 @@ g2_nm_add_tags <- merge(temp, add_tags)
 
 test_nm_county <- g2_nm_add_tags %>%
   group_by(County) %>%
-  summarize('Test NM Trips' = sum(Total_NM, na.rm=T)) %>%
-  adorn_totals('row')
+  summarize('Test NM Trips' = sum(Total_NM, na.rm=T)) 
 
 test_nm_cluster <- g2_nm_add_tags %>%
   group_by(ClusterName) %>%
-  summarize('Test NM Trips' = sum(Total_NM, na.rm=T)) %>%
-  adorn_totals('row')
+  summarize('Test NM Trips' = sum(Total_NM, na.rm=T)) 
 
 
 
 final_county <- merge(test_nm_county, g2_nm_county) %>%
   mutate(Difference = `Test NM Trips` - `Base NM Trips`)%>%
+  adorn_totals('row') %>%
   kbl(caption = "Difference in NM Trips", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+  kable_classic(full_width = T, html_font = "Cambria")
 
 final_county
 
@@ -877,8 +879,9 @@ final_county
 
 final_cluster <- merge(test_nm_cluster, g2_nm_cluster)%>%
   mutate(Difference = `Test NM Trips` - `Base NM Trips`)%>%
+    adorn_totals('row') %>%
   kbl(caption = "Difference in NM Trips", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+  kable_classic(full_width = T, html_font = "Cambria")
 
 final_cluster
 
@@ -966,7 +969,7 @@ final_county <- merge(test_vmt_by_county, g2_vmt_by_county)%>%
   mutate(Difference = `Test VMT` - `Base VMT`)%>%
   adorn_totals('row') %>% 
   kbl(caption = "Difference in VMT", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+  kable_classic(full_width = T, html_font = "Cambria")
 
 final_county
 
@@ -983,13 +986,60 @@ final_county
 
 ### Overview
 
-The transit test was conducted to determine the TRMG2 transit assignment sensitivity when headway is halved for all routes. This was done by reducing the headway across all four periods (AM, MD, PM, NT) in the the master_routes (keeping values =-1 constant) by 0.5. Transit ridership and VMT are summarized compared to the base 2016 model results below. 
+The transit test was conducted to determine the TRMG2 transit assignment sensitivity when headway is halved for all routes. This was done by reducing the headway across all four periods (AM, MD, PM, NT) in the the master_routes (keeping values =-1 constant) by 0.5. Transit ridership and VMT are summarized compared to the base 2016 model results. The edited headway for selected transit routes are shown below: 
+
+
+Takeaways/Questions: 
+
+* Halving headway across all transit lines and TOD resulted in sensible increase in transit ridership (+29%)
+* VMT also decreased by 0.38% relative to total 2016 BY. 
+* VMT appears to remain sticky
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+new_headway <- read_tcad('C:/Users/JacobFo/TRMG2_v0.2/scenarios/Transit_Test/input/networks/scenario_routesR.bin') %>%
+  select(Route_Name, AMHeadway, MDHeadway, PMHeadway, NTHeadway, Agency)
+
+old_headway <- read_tcad('C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/input/networks/scenario_routesR.bin') %>%
+  select(Route_Name, AMHeadway, MDHeadway, PMHeadway, NTHeadway, Agency)
+
+new_headway <- head(new_headway, 15)
+old_headway <- head(old_headway, 15)
+
+new_headway %>%
+  kbl(caption="Transit Test Headway") %>%
+  kable_classic(html_font="Cambria")
+
+old_headway %>%
+  kbl(caption="Base Headway") %>%
+  kable_classic(html_font="Cambria")
+
+
+
+```
 
 
 ### Transit Ridership
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+
+#transit test
+
+
+g2_transit_test <- read.csv('C:/Users/JacobFo/TRMG2_v0.2/scenarios/Transit_Test/output/_summaries/transit/boardings_and_alightings_by_period.csv') %>%
+  group_by(Agency) %>%
+  summarize(AM = sum(On[period=="AM"], na.rm=T),
+            MD = sum(On[period=="MD"], na.rm=T),
+            PM = sum(On[period=="PM"], na.rm=T),
+            NT = sum(On[period=="NT"], na.rm=T)) %>%
+  mutate(Total = AM + MD + PM + NT)%>%
+  adorn_totals('row')
+
+g2_transit_test %>%
+  kbl(caption = "Transit Test Scenario Total Transit Ridership by TOD", digits=0) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
 ##Load TRMG2 Transit
 
 
@@ -1010,21 +1060,6 @@ g2_transit %>%
 
 
 
-#transit test
-
-
-g2_transit_test <- read.csv('C:/Users/JacobFo/TRMG2_v0.2/scenarios/Transit_Test/output/_summaries/transit/boardings_and_alightings_by_period.csv') %>%
-  group_by(Agency) %>%
-  summarize(AM = sum(On[period=="AM"], na.rm=T),
-            MD = sum(On[period=="MD"], na.rm=T),
-            PM = sum(On[period=="PM"], na.rm=T),
-            NT = sum(On[period=="NT"], na.rm=T)) %>%
-  mutate(Total = AM + MD + PM + NT)%>%
-  adorn_totals('row')
-
-g2_transit_test %>%
-  kbl(caption = "Transit Test Scenario Total Transit Ridership by TOD", digits=0) %>%
-  kable_classic(full_width = F, html_font = "Cambria")
 
 #relative change 
 
@@ -1048,7 +1083,10 @@ for (i in (1:11)){
 
 difference %>%
   kbl(caption = "Difference Transit Test - TRMG2", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+  kable_classic(full_width =F, html_font = "Cambria")
+
+
+
 
 
 ```
@@ -1130,7 +1168,9 @@ final_mpo
 final_county <- merge(test_vmt_by_county, g2_vmt_by_county)%>%
   mutate(Difference = `Test VMT` - `Base VMT`)%>%
   adorn_totals('row') %>% 
-  kbl(caption = "Difference in VMT", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
+  mutate('Percent Difference' = (Difference/`Base VMT`)*100) %>%
+  # adorn_totals('row') %>% 
+  kbl(caption = "Difference in VMT", digits=2,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
   kable_classic(full_width = F, html_font = "Cambria")
 
 final_county
