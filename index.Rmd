@@ -772,6 +772,7 @@ Takeaways/Questions:
 
 * After removing the American Tobacco Trail, NM trips increased overall albeit very slightly. This may seem counterintuitive after removing the largest NM pathway in the model region. 
 * Removal of ATT should impact the walkability and/or approach density used in accessibility calculation 
+* VMT remains sticky, overall *dropping* by 0.01% 
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
