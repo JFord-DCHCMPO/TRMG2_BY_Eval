@@ -1,0 +1,32 @@
+{
+    "id": "265BB150",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1647443651712.0,
+    "source_on_save": false,
+    "relative_order": 12,
+    "properties": {
+        "expression": "g2_nm_county",
+        "caption": "g2_nm_county",
+        "totalObservations": "12",
+        "displayedObservations": "12",
+        "variables": "2",
+        "cacheKey": "9F4AFC5D",
+        "object": "g2_nm_county",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=g2_nm_county&cache_key=9F4AFC5D&max_cols=50",
+        "preview": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 7812735413947359589,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1647443651712,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -732,7 +732,7 @@ g2_transit %>%
 # Sensitivity Tests {.tabset .tabset-fade}
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
-
+##NMTest
 
 g2_nm_highway <-  read_tcad("C:/Users/JacobFo/TRMG2_v0.2/scenarios/NM_Test/output/networks/scenario_links.bin") %>%
   select(ID, HCMType, DailyCount, Total_Flow_Daily, Total_VMT_Daily, County, AreaType, MPO, Total_Delay_Daily, Screenline)
@@ -741,6 +741,15 @@ g2_nm_highway <- g2_nm_highway %>%
   filter(Total_Flow_Daily > 0) 
 
 g2_nm_highway$County <- tolower(g2_nm_highway$County)
+
+#transit
+g2_transit_highway <-  read_tcad("C:/Users/JacobFo/TRMG2_v0.2/scenarios/Transit_Test/output/networks/scenario_links.bin") %>%
+  select(ID, HCMType, DailyCount, Total_Flow_Daily, Total_VMT_Daily, County, AreaType, MPO, Total_Delay_Daily, Screenline)
+
+g2_transit_highway <- g2_transit_highway %>%
+  filter(Total_Flow_Daily > 0) 
+
+g2_transit_highway$County <- tolower(g2_transit_highway$County)
 ```
 
 
@@ -749,6 +758,39 @@ g2_nm_highway$County <- tolower(g2_nm_highway$County)
 ### Overview
 
 The nonmotorized test removed the entire American Tobacco Trail from the network. Inputs from the 2016 base year were kept exactly the same.  Total TAZ level nonmotorized trips are compared to the base year with American Tobacco Trail included to this test scenario below. Outputs analyzed include nonmotorized trips and VMT to determine TRMG2 sensitivity to scenario testing. 
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(leaflet)
+library(sf)
+
+taz <- st_read("C:/Users/JacobFo/OneDrive - City of Durham/Archive/full taz.shp")
+
+g2_hwy <- st_read('C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/output/networks/hwy_links.shp') 
+
+att <- g2_hwy %>%
+  filter(grepl("American Tobacco Trail", ROADNAME))
+
+
+g2_hwy <- g2_hwy %>% filter(!is.na(NCDOTCLASS))
+g2_hwy <- st_transform(g2_hwy, st_crs(taz)) %>% st_make_valid()
+
+
+
+
+
+leaflet() %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  addPolylines(data=g2_hwy,
+               weight=0.5,
+               color='grey') %>%
+  addPolylines(data=att,
+               weight=2.5,
+               color='red') 
+```
+
 
 ### Nonmotorized Trips
 
@@ -774,21 +816,21 @@ g2_nm_add_tags <- merge(temp, add_tags)
 
 g2_nm_county <- g2_nm_add_tags %>%
   group_by(County) %>%
-  summarize(NM_Trips = sum(Total_NM, na.rm=T)) %>%
+  summarize('Base NM Trips' = sum(Total_NM, na.rm=T)) %>%
   adorn_totals('row')
 
 g2_nm_cluster <- g2_nm_add_tags %>%
   group_by(ClusterName) %>%
-  summarize(NM_Trips = sum(Total_NM, na.rm=T)) %>%
+  summarize('Base NM Trips' = sum(Total_NM, na.rm=T)) %>%
   adorn_totals('row')
 
-g2_nm_county%>%
-  kbl(caption = "TRMG2 2016 Total Nonmotorized Trips by County") %>%
-  kable_classic(full_width = F, html_font = "Cambria")
-
-g2_nm_cluster%>%
-  kbl(caption = "TRMG2 2016 Total Nonmotorized Trips by Cluster") %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+# g2_nm_county%>%
+#   kbl(caption = "TRMG2 2016 Total Nonmotorized Trips by County") %>%
+#   kable_classic(full_width = F, html_font = "Cambria")
+# 
+# g2_nm_cluster%>%
+#   kbl(caption = "TRMG2 2016 Total Nonmotorized Trips by Cluster") %>%
+#   kable_classic(full_width = F, html_font = "Cambria")
 
 
 
@@ -807,24 +849,35 @@ add_tags <- read_tcad('C:/Users/JacobFo/TRMG2_v0.2/scenarios/NM_Test/input/tazs/
 
 g2_nm_add_tags <- merge(temp, add_tags)
 
-g2_nm_county <- g2_nm_add_tags %>%
+test_nm_county <- g2_nm_add_tags %>%
   group_by(County) %>%
-  summarize(NM_Trips = sum(Total_NM, na.rm=T)) %>%
+  summarize('Test NM Trips' = sum(Total_NM, na.rm=T)) %>%
   adorn_totals('row')
 
-g2_nm_cluster <- g2_nm_add_tags %>%
+test_nm_cluster <- g2_nm_add_tags %>%
   group_by(ClusterName) %>%
-  summarize(NM_Trips = sum(Total_NM, na.rm=T)) %>%
+  summarize('Test NM Trips' = sum(Total_NM, na.rm=T)) %>%
   adorn_totals('row')
 
-g2_nm_county%>%
-  kbl(caption = "Removed ATT Total Nonmotorized Trips by County") %>%
+
+
+final_county <- merge(test_nm_county, g2_nm_county) %>%
+  mutate(Difference = `Test NM Trips` - `Base NM Trips`)%>%
+  kbl(caption = "Difference in NM Trips", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
   kable_classic(full_width = F, html_font = "Cambria")
 
-g2_nm_cluster%>%
-  kbl(caption = "Removed ATT Total Nonmotorized Trips by Cluster") %>%
+final_county
+
+
+
+
+
+final_cluster <- merge(test_nm_cluster, g2_nm_cluster)%>%
+  mutate(Difference = `Test NM Trips` - `Base NM Trips`)%>%
+  kbl(caption = "Difference in NM Trips", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
   kable_classic(full_width = F, html_font = "Cambria")
 
+final_cluster
 
 ```
 
@@ -838,7 +891,7 @@ g2_nm_cluster%>%
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
-temp2 <- g2 %>%
+g2_vmt_by_mpo <- g2 %>%
  # filter(DailyCount > 0) %>%
   mutate(MPO_Tag = case_when(
     MPO=="" ~ 'None',
@@ -848,27 +901,19 @@ temp2 <- g2 %>%
   )) %>%
   group_by(MPO_Tag) %>%
    summarise(
-    Total_VMT = sum(Total_VMT_Daily, na.rm=T))%>%
+    'Base VMT' = sum(Total_VMT_Daily, na.rm=T))%>%
   adorn_totals('row')
 
-temp2 %>%
-  kbl(caption = "TRMG2 Total VMT by MPO") %>%
-  kable_classic(full_width = F, html_font = "Cambria")
 
 
-temp2 <- g2 %>%
+g2_vmt_by_county <- g2 %>%
   group_by(County) %>%
   filter(County !="")%>%
  #filter(DailyCount > 0) %>%
   summarise(
-    Total_VMT = sum(Total_VMT_Daily, na.rm=T)) %>%
+    'Base VMT' = sum(Total_VMT_Daily, na.rm=T)) %>%
   arrange(County) %>%
   adorn_totals('row') 
-
-temp2 %>%
-  kbl(caption = "TRMG2 Total Volume by County") %>%
-  kable_classic(full_width = F, html_font = "Cambria")
-
 
 
 ## NM Test
@@ -876,7 +921,7 @@ temp2 %>%
 
 
 
-temp2 <- g2_nm_highway %>%
+test_vmt_by_mpo <- g2_nm_highway %>%
  # filter(DailyCount > 0) %>%
   mutate(MPO_Tag = case_when(
     MPO=="" ~ 'None',
@@ -886,26 +931,42 @@ temp2 <- g2_nm_highway %>%
   )) %>%
   group_by(MPO_Tag) %>%
    summarise(
-    Total_VMT = sum(Total_VMT_Daily, na.rm=T))%>%
-  adorn_totals('row')
-
-temp2 %>%
-  kbl(caption = "Removed ATT Total VMT by MPO") %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+    'Test VMT' = sum(Total_VMT_Daily, na.rm=T))
 
 
-temp2 <- g2_nm_highway %>%
+
+
+test_vmt_by_county <- g2_nm_highway %>%
   group_by(County) %>%
   filter(County !="")%>%
  #filter(DailyCount > 0) %>%
   summarise(
-    Total_VMT = sum(Total_VMT_Daily, na.rm=T)) %>%
-  arrange(County) %>%
-  adorn_totals('row') 
+    'Test VMT' = sum(Total_VMT_Daily, na.rm=T)) %>%
+  arrange(County)
 
-temp2 %>%
-  kbl(caption = "Removed ATT Total Volume by County") %>%
+
+
+
+final_mpo <- merge(test_vmt_by_mpo, g2_vmt_by_mpo) %>%
+  mutate(Difference = `Test VMT` - `Base VMT`)%>%
+  adorn_totals('row') %>% 
+  kbl(caption = "Difference in VMT", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
   kable_classic(full_width = F, html_font = "Cambria")
+
+final_mpo
+
+
+
+
+
+final_county <- merge(test_vmt_by_county, g2_vmt_by_county)%>%
+  mutate(Difference = `Test VMT` - `Base VMT`)%>%
+  adorn_totals('row') %>% 
+  kbl(caption = "Difference in VMT", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+final_county
+
 
 ```
 
@@ -922,7 +983,155 @@ temp2 %>%
 
 
 
+### Transit Ridership
 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+##Load TRMG2 Transit
+
+
+
+g2_transit <- read.csv('C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/output/_summaries/transit/boardings_and_alightings_by_period.csv') %>%
+  group_by(Agency) %>%
+  summarize(AM = sum(On[period=="AM"], na.rm=T),
+            MD = sum(On[period=="MD"], na.rm=T),
+            PM = sum(On[period=="PM"], na.rm=T),
+            NT = sum(On[period=="NT"], na.rm=T)) %>%
+  mutate(Total = AM + MD + PM + NT) %>%
+  adorn_totals('row')
+
+
+g2_transit %>%
+  kbl(caption = "TRMG2 Total Transit Ridership by TOD", digits=0) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+
+
+#transit test
+
+
+g2_transit_test <- read.csv('C:/Users/JacobFo/TRMG2_v0.2/scenarios/Transit_Test/output/_summaries/transit/boardings_and_alightings_by_period.csv') %>%
+  group_by(Agency) %>%
+  summarize(AM = sum(On[period=="AM"], na.rm=T),
+            MD = sum(On[period=="MD"], na.rm=T),
+            PM = sum(On[period=="PM"], na.rm=T),
+            NT = sum(On[period=="NT"], na.rm=T)) %>%
+  mutate(Total = AM + MD + PM + NT)%>%
+  adorn_totals('row')
+
+g2_transit_test %>%
+  kbl(caption = "Transit Test Scenario Total Transit Ridership by TOD", digits=0) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+#relative change 
+
+difference = g2_transit[,1]
+
+difference$AM <- NA
+difference$MD <- NA
+difference$PM <- NA
+difference$NT <- NA
+difference$Total <- NA
+
+for (i in (1:11)){
+  
+  difference$AM[i] <- g2_transit_test$AM[g2_transit_test$Agency==difference$Agency[i]]- g2_transit$AM[g2_transit$Agency==difference$Agency[i]]  
+  difference$MD[i] <- g2_transit_test$MD[g2_transit_test$Agency==difference$Agency[i]] - g2_transit$MD[g2_transit$Agency==difference$Agency[i]] 
+  difference$PM[i] <-  g2_transit_test$PM[g2_transit_test$Agency==difference$Agency[i]]- g2_transit$PM[g2_transit$Agency==difference$Agency[i]]
+  difference$NT[i] <-   g2_transit_test$NT[g2_transit_test$Agency==difference$Agency[i]] - g2_transit$NT[g2_transit$Agency==difference$Agency[i]]
+  difference$Total[i] <-  g2_transit_test$Total[g2_transit_test$Agency==difference$Agency[i]] - g2_transit$Total[g2_transit$Agency==difference$Agency[i]] 
+  
+}
+
+difference %>%
+  kbl(caption = "Difference Transit Test - TRMG2", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+
+```
+
+
+### VMT
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+g2_vmt_by_mpo <- g2 %>%
+ # filter(DailyCount > 0) %>%
+  mutate(MPO_Tag = case_when(
+    MPO=="" ~ 'None',
+    MPO == "None" ~ 'None',
+    MPO == "CAMPO" ~ 'CAMPO',
+    MPO == "DCHC" ~ 'DCHC'
+  )) %>%
+  group_by(MPO_Tag) %>%
+   summarise(
+    'Base VMT' = sum(Total_VMT_Daily, na.rm=T))%>%
+  adorn_totals('row')
+
+
+
+g2_vmt_by_county <- g2 %>%
+  group_by(County) %>%
+  filter(County !="")%>%
+ #filter(DailyCount > 0) %>%
+  summarise(
+    'Base VMT' = sum(Total_VMT_Daily, na.rm=T)) %>%
+  arrange(County) %>%
+  adorn_totals('row') 
+
+
+## NM Test
+
+
+
+
+test_vmt_by_mpo <- g2_transit_highway %>%
+ # filter(DailyCount > 0) %>%
+  mutate(MPO_Tag = case_when(
+    MPO=="" ~ 'None',
+    MPO == "None" ~ 'None',
+    MPO == "CAMPO" ~ 'CAMPO',
+    MPO == "DCHC" ~ 'DCHC'
+  )) %>%
+  group_by(MPO_Tag) %>%
+   summarise(
+    'Test VMT' = sum(Total_VMT_Daily, na.rm=T))
+
+
+
+
+test_vmt_by_county <- g2_transit_highway %>%
+  group_by(County) %>%
+  filter(County !="")%>%
+ #filter(DailyCount > 0) %>%
+  summarise(
+    'Test VMT' = sum(Total_VMT_Daily, na.rm=T)) %>%
+  arrange(County)
+
+
+
+
+final_mpo <- merge(test_vmt_by_mpo, g2_vmt_by_mpo) %>%
+  mutate(Difference = `Test VMT` - `Base VMT`)%>%
+  adorn_totals('row') %>% 
+  kbl(caption = "Difference in VMT", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+final_mpo
+
+
+
+
+
+final_county <- merge(test_vmt_by_county, g2_vmt_by_county)%>%
+  mutate(Difference = `Test VMT` - `Base VMT`)%>%
+  adorn_totals('row') %>% 
+  kbl(caption = "Difference in VMT", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+final_county
+```
 
 
 

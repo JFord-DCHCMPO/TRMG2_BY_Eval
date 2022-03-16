@@ -1,0 +1,32 @@
+{
+    "id": "D682B16C",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1647443953069.0,
+    "source_on_save": false,
+    "relative_order": 11,
+    "properties": {
+        "expression": "test_nm_cluster",
+        "caption": "test_nm_cluster",
+        "totalObservations": 13,
+        "displayedObservations": 13,
+        "variables": 2,
+        "cacheKey": "2928B0D7",
+        "object": "test_nm_cluster",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=test_nm_cluster&cache_key=2928B0D7&max_cols=50",
+        "preview": 0
+    },
+    "folds": "",
+    "lastKnownWriteTime": 14918457237897282,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1647443953069,
+    "read_only": false,
+    "read_only_alternatives": []
+}
