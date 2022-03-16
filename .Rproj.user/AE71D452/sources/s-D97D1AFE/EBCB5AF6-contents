@@ -2,7 +2,10 @@
 title: "TRMG2 Evaluation"
 author: "Jacob Ford DCHC MPO"
 date: "2/22/2022"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 This document analyzes the initial base year (2016) model output for the TRMG2 against the TRMv6.2. Note: The TRMG2 2016 base year will be updated to the 2020 upon final delivery, however the interim delivery of the 2016 network is useful to analyze the TRMG2 assignment in comparison to the TRMv6.2. Note, as the TRMG2 model includes the expansion into Alamance and Johnston Counties, county level totals may deviate from totals in TRMv6.2. 
@@ -23,6 +26,7 @@ library(caliperR)
 library(tcadr)
 library(janitor)
 library(dplyr)
+library(sf)
 library(data.table)
 library(dplyr)
 library(ggpmisc)
@@ -30,6 +34,7 @@ library(plotly)
 library(data.table)
 library(knitr)
 library(kableExtra)
+library(leaflet)
 
 
 g2 <-  read_tcad("C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/output/networks/scenario_links.bin") %>%
@@ -60,6 +65,10 @@ v_counts <- read_tcad("C:/Users/JacobFo/OneDrive - City of Durham/Full Model Run
 ##Final TRMv6.2 line layer with counts
 add_counts <- left_join(v, v_counts)
 
+
+taz <- st_read("C:/Users/JacobFo/OneDrive - City of Durham/Archive/full taz.shp")
+
+g2_hwy <- st_read('C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/output/networks/hwy_links.shp') 
 
 ```
 
@@ -763,12 +772,6 @@ The nonmotorized test removed the entire American Tobacco Trail from the network
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-library(leaflet)
-library(sf)
-
-taz <- st_read("C:/Users/JacobFo/OneDrive - City of Durham/Archive/full taz.shp")
-
-g2_hwy <- st_read('C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/output/networks/hwy_links.shp') 
 
 att <- g2_hwy %>%
   filter(grepl("American Tobacco Trail", ROADNAME))
@@ -980,7 +983,7 @@ final_county
 
 ### Overview
 
-
+The transit test was conducted to determine the TRMG2 transit assignment sensitivity when headway is halved for all routes. This was done by reducing the headway across all four periods (AM, MD, PM, NT) in the the master_routes (keeping values =-1 constant) by 0.5. Transit ridership and VMT are summarized compared to the base 2016 model results below. 
 
 
 ### Transit Ridership
