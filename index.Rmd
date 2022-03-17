@@ -992,7 +992,7 @@ The transit test was conducted to determine the TRMG2 transit assignment sensiti
 
 Takeaways/Questions: 
 
-* Halving headway across all transit lines and TOD resulted in sensible increase in transit ridership (+29%)
+* Halving headway across all transit lines and TOD resulted in sensible increase in transit ridership (+29%); this is an improvement over TRMv6.2 sensitivity in transit ridership when headway is reduced by half, where in total transit trips increase by 20%. 
 * VMT also decreased by 0.38% relative to total 2016 BY. 
 * VMT appears to remain sticky
 
@@ -1089,6 +1089,96 @@ difference %>%
 
 
 
+
+```
+
+### Halfheadway in TRMv6.2
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+line_names <- c("TTA", "CAT", "CHT", 'DATA', 'NCSU', 'Duke', 'OPT', 'CTRAN')
+
+observed <-read_tcad("c:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016/EvalModule/Transit_Ridership_Observed_2016.bin") %>%
+  rename(OPERATOR = COMPANY,
+         Observed = RIDERSHIP) %>%
+  add_row(OPERATOR = 'OPT',Observed= 0)
+
+observed$OPERATOR <- tolower(observed$OPERATOR)
+
+
+
+op_data <- read_tcad("c:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016/Output/OPT.bin") %>%
+  mutate(OPERATOR = line_names) %>%
+  group_by(OPERATOR) %>%
+  summarize(Total_OP =OPTVIEW1ON +OPTVIEW2ON + OPTVIEW3ON + OPTVIEW4ON + 
+  OPTVIEW5ON + OPTVIEW6ON + OPTVIEW7ON + OPTVIEW8ON )
+
+
+
+pk_data <- read_tcad("c:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016/Output/PKT.bin")%>%
+  mutate(OPERATOR = line_names) %>%
+  group_by(OPERATOR) %>%
+  summarize(Total_PK =PKTVIEW1ON +PKTVIEW2ON + PKTVIEW3ON + PKTVIEW4ON + 
+  PKTVIEW5ON + PKTVIEW6ON + PKTVIEW7ON + PKTVIEW8ON )
+
+
+total_transit <- merge(op_data, pk_data) %>%
+  mutate(Total_Trips = Total_OP + Total_PK) 
+
+
+total_transit$OPERATOR <- tolower(total_transit$OPERATOR)
+
+total <- merge(total_transit, observed) %>%
+  adorn_totals('row')#%>%
+ # mutate(PctDev = (Total_Trips - Observed)/Observed)
+
+
+total %>%
+  kbl(caption = "Original TRMv6.2 Transit Assignment", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+
+
+
+
+observed <-read_tcad("c:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016/EvalModule/Transit_Ridership_Observed_2016.bin") %>%
+  rename(OPERATOR = COMPANY,
+         Observed = RIDERSHIP) %>%
+  add_row(OPERATOR = 'OPT',Observed= 0)
+
+observed$OPERATOR <- tolower(observed$OPERATOR)
+
+
+
+op_data <- read_tcad("c:/Users/JacobFo/TRMv6.2/2016_HalfHeadway/Output/OPT.bin") %>%
+  mutate(OPERATOR = line_names) %>%
+  group_by(OPERATOR) %>%
+  summarize(Total_OP =OPTVIEW1ON +OPTVIEW2ON + OPTVIEW3ON + OPTVIEW4ON + 
+  OPTVIEW5ON + OPTVIEW6ON + OPTVIEW7ON + OPTVIEW8ON )
+
+
+
+pk_data <- read_tcad("c:/Users/JacobFo/TRMv6.2/2016_HalfHeadway/Output/PKT.bin")%>%
+  mutate(OPERATOR = line_names) %>%
+  group_by(OPERATOR) %>%
+  summarize(Total_PK =PKTVIEW1ON +PKTVIEW2ON + PKTVIEW3ON + PKTVIEW4ON + 
+  PKTVIEW5ON + PKTVIEW6ON + PKTVIEW7ON + PKTVIEW8ON )
+
+
+total_transit <- merge(op_data, pk_data) %>%
+  mutate(Total_Trips = Total_OP + Total_PK) 
+
+
+total_transit$OPERATOR <- tolower(total_transit$OPERATOR)
+
+total <- merge(total_transit, observed) %>%
+  adorn_totals('row')#%>%
+  #mutate(PctDev = (Total_Trips - Observed)/Observed)
+
+
+
+
+total %>%
+  kbl(caption = "Half Headway TRMv6.2 Assignment", digits=0,format.args = list(big.mark = ",",  scientific = FALSE)) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
 
 ```
 

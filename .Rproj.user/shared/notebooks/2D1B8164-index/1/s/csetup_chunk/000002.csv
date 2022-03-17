@@ -1,95 +1,128 @@
 "0","knitr::opts_chunk$set(warning = FALSE, message = FALSE)"
 "0","library(caliperR)"
+"2","Loading required package: RDCOMClient
+"
+"2","Registered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+"
+"2","Registered S3 method overwritten by 'data.table':
+  method           from
+  print.data.table     
+"
 "0","library(tcadr)"
 "0","library(janitor)"
+"2","
+Attaching package: ‘janitor’
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test
+
+"
 "0","library(dplyr)"
+"2","package ‘dplyr’ was built under R version 4.0.5"
+"2","
+Attaching package: ‘dplyr’
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
 "0","library(sf)"
+"2","package ‘sf’ was built under R version 4.0.5"
+"2","Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1
+"
 "0","library(data.table)"
+"2","data.table 1.13.6 using 8 threads (see ?getDTthreads).  Latest news: r-datatable.com
+"
+"2","
+Attaching package: ‘data.table’
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    between, first, last
+
+"
 "0","library(dplyr)"
 "0","library(ggpmisc)"
+"2","package ‘ggpmisc’ was built under R version 4.0.5"
+"2","Loading required package: ggpp
+"
+"2","package ‘ggpp’ was built under R version 4.0.5"
+"2","Loading required package: ggplot2
+"
+"2","
+Attaching package: ‘ggpp’
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    annotate
+
+"
 "0","library(plotly)"
+"2","
+Attaching package: ‘plotly’
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    filter
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    layout
+
+"
 "0","library(data.table)"
 "0","library(knitr)"
+"2","package ‘knitr’ was built under R version 4.0.5"
 "0","library(kableExtra)"
+"2","package ‘kableExtra’ was built under R version 4.0.4"
+"2","
+Attaching package: ‘kableExtra’
+
+"
+"2","The following object is masked from ‘package:dplyr’:
+
+    group_rows
+
+"
 "0","library(leaflet)"
 "0",""
 "0",""
 "0","g2 <-  read_tcad(""C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/output/networks/scenario_links.bin"") %>%"
 "0","  select(ID, HCMType, DailyCount, Total_Flow_Daily, Total_VMT_Daily, County, AreaType, MPO, Total_Delay_Daily, Screenline)"
-"0",""
+"2","`tbl_df()` was deprecated in dplyr 1.0.0.
+Please use `tibble::as_tibble()` instead."
+"2","`funs()` was deprecated in dplyr 0.8.0.
+Please use a list of either functions or lambdas: 
+
+  # Simple named list: 
+  list(mean = mean, median = median)
+
+  # Auto named with `tibble::lst()`: 
+  tibble::lst(mean, median)
+
+  # Using lambdas
+  list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))"
 "0","g2 <- g2 %>%"
 "0","  filter(Total_Flow_Daily > 0) "
 "0",""
 "0","g2$County <- tolower(g2$County)"
-"0",""
-"0",""
-"0","v <- read_tcad(""C:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016/Input/Highway/Highway_Line.bin"") "
-"0","v[is.na(v)]<-0"
-"0",""
-"0","v['TotVMT'] = v['ABAMVMT']+v['ABMDVMT']+v['ABNTVMT']+v['ABPMVMT']+v['BAAMVMT']+v['BAMDVMT']+v['BANTVMT']+v['BAPMVMT']"
-"0","##get rid of NA values, set to zero:"
-"0",""
-"0",""
-"0",""
-"0","v$COUNTY <- tolower(v$COUNTY)"
-"0",""
-"0",""
-"0","##Add Daily Counts file: "
-"0","v_counts <- read_tcad(""C:/Users/JacobFo/OneDrive - City of Durham/Full Model Runs/Original TRMv6.2_2016/EvalModule/TRM6_Count_2016_Observed.bin"") %>%"
-"0","  select(ID, Daily_Counts = Daily.Counts, Screenline, Cutline)"
-"0",""
-"0",""
-"0","##Final TRMv6.2 line layer with counts"
-"0","add_counts <- left_join(v, v_counts)"
-"0",""
-"0",""
-"0","taz <- st_read(""C:/Users/JacobFo/OneDrive - City of Durham/Archive/full taz.shp"")"
-"1","Reading layer `"
-"1","full taz"
-"1","' from data source "
-"1","`"
-"1","C:\Users\JacobFo\OneDrive - City of Durham\Archive\full taz.shp"
-"1","' "
-"1","using driver `"
-"1","ESRI Shapefile"
-"1","'"
-"1","
-"
-"1","Simple feature collection with 2857 features and 14 fields"
-"1","
-"
-"1","Geometry type: MULTIPOLYGON
-"
-"1","Dimension:     XY
-"
-"1","Bounding box:  "
-"1","xmin: -79.40362 ymin: 35.32399 xmax: -78.12731 ymax: 36.49584"
-"1","
-"
-"1","Geodetic CRS:  Unknown datum based upon the GRS 1980 ellipsoid
-"
-"0","g2_hwy <- st_read('C:/Users/JacobFo/TRMG2_v0.2/scenarios/base_2016/output/networks/hwy_links.shp') "
-"1","Reading layer `"
-"1","hwy_links"
-"1","' from data source "
-"1","`"
-"1","C:\Users\JacobFo\TRMG2_v0.2\scenarios\base_2016\output\networks\hwy_links.shp"
-"1","' "
-"1","using driver `"
-"1","ESRI Shapefile"
-"1","'"
-"1","
-"
-"1","Simple feature collection with 127834 features and 60 fields"
-"1","
-"
-"1","Geometry type: LINESTRING
-"
-"1","Dimension:     XY
-"
-"1","Bounding box:  "
-"1","xmin: -79.407 ymin: 35.33281 xmax: -78.08683 ymax: 36.49905"
-"1","
-"
-"1","Geodetic CRS:  NAD83
-"
